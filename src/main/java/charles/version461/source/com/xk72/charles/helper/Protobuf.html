@@ -1,0 +1,33 @@
+<h2>Protocol Buffers Descriptor Registry</h2>
+<p>
+Charles identifies that an HTTP request or response contains a Protocol Buffers message when the Content-Type header has a MIME type of 
+<b>application/x-protobuf</b> or <b>application/x-google-protobuf</b>.
+</p>
+<p>
+In order to parse the content Charles needs to know the protobuf type for the message and be able to load the protobuf descriptor for that type.
+The message type can be specified by:
+<ol>
+<li>Giving the fully qualified name of the type in a MIME type parameter (named <b>messageType</b>) as part of the Content-Type header</li>
+<li>Configuring a Viewer Mapping for the remote location the message was transported to or from</li>
+</ol>
+Similarly there are two ways to supply the descriptor to Charles:
+<ol>
+<li>The URL from which the descriptor can be loaded can be given in another MIME type parameter (named <b>desc</b>) as part of the Content-Type header</li>
+<li>Add the descriptor file to this registry</li>
+</ol>
+A Content-Type header specifying both the descriptor and messageType would look like:
+
+<h3>Content-Type: application/x-protobuf; desc="http://server/Model.desc"; messageType="com.sample.Message"</h3>
+
+</p>
+<p>
+There are two base descriptor files - <b>google.protobuf.desc</b> and <b>unknown.desc</b> - that contain the default message types used by Charles, these descriptors cannot be removed.
+</p>
+<p>
+Order is important, the descriptors are loaded in the order in which they appear in the registry list, so if you have dependencies between your descriptor files you need to add them in the correct order.
+Additionally if you have same message type defined in more than one descriptor whichever descriptor is loaded last takes precedence.  
+This means you can overwrite the default set of message types in <b>google.protobuf.desc</b> by adding a new descriptor with updated versions of those message types to your registry.
+</p>
+<p>
+The Messages list is not editable, it simply allows you to inspect the list of message types contained within the currently loaded descriptor files.
+</p>

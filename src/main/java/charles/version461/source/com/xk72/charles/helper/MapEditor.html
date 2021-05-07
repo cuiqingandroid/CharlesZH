@@ -1,0 +1,13 @@
+<h2>Remote Mapping</h2>
+<p>A remote mapping consists of a Map From location and a Map To location.</p>
+
+<h3>Map From</h3>
+<p>The Map From location is a regular location pattern. See the section on Location matching below.</p>
+
+<h3>Map To</h3>
+<p>The Map To location specifies what to change about the original request. Any field left blank will be
+left unchanged.</p>
+<p>If a path is specified it should end with a /. The original request path will be made relative
+to the Map From location pattern and then mapped to be relative to the Map To path.</p>
+
+@@tools.gen.locations.locationMatchingEditor@@

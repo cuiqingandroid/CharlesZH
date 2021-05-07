@@ -1,0 +1,35 @@
+<h2>Rewrite Rule</h2>
+<p>Each rule describes a single rewrite operation.</p>
+
+<h3>Type</h3>
+<p>The type specifies the type of rewriting operation to perform. There are four different categories of rewrite rule types;
+header rules, URL rules, query parameter rules, response status rules and body rules. The header and query parameter rules effect the header fields
+and query string parameters respectively; adding, modifying or removing headers and parameters. The URL and body rules perform
+find and replace on the different parts of the URL and on the body. The response status rule performs find and replace on the response status code and description, eg. 200 OK.</p>
+
+<h3>Where</h3>
+<p>Choose where to apply the rewrite rule; on the request, response or both.</p>
+
+<h3>Match</h3>
+<p>The match fields contain the text to match in the request or response to decide whether to fire this rule. You can leave either the name or value blank, or both, to
+match any value. If you leave both the name and value fields blank you will match all requests / responses.</p>
+<p>Regex support may be enabled, providing Perl-style regular expressions for your match. If you include groups in your regular expression they
+may be used in the match fields.</p>
+<p>The name field is an exact match field unless regex is enabled, in which case it supports partial matches. The name field is case-insensitive
+for both regex and normal matching. 
+The name field may be disabled if you are creating a rewrite rule type that doesn't require it.</p>
+<p>The value field is a partial match unless you turn on Match whole value in which case it is an exact match. The value field is case-insensitive
+for both regex and normal matching for header and query parameter rules, and case-sensitive for URL and body rules.</p>
+
+<h3>New / Replace</h3>
+<p>The new/replace fields contain the text to add or replace in the request or response when this rule is fired. Leave either the name or value blank
+to leave them the same as the matched name or value.</p>
+<p>If regex support is enabled for the match you may reference match groups using $1, $2 and so on.</p>
+<p>The behaviour of the name and value fields depends upon the match. If there is a corresponding match then the field acts as a replacement
+for the matched text, otherwise if the match is blank then the fields replaces the whole name or value.</p>
+<p>The value field supports Replace First or Replace All modes. The name field always operates in replace-first mode if the name match is a regex,
+otherwise it is an exact match and replaces the whole name.</p>
+<p>The name and or value fields may be disabled if you are creating a rewrite rule type that doesn't require them.</p>
+
+<h3>Recommendations</h3>
+<p>Rewrite rules can be difficult to debug if they are not working as you expect. It is often best to build up a rule slowly with frequent testing.</p>

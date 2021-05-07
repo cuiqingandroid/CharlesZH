@@ -1,0 +1,52 @@
+<h2>Proxies</h2>
+<p>Charles can operate as an HTTP proxy and as a SOCKS proxy. The HTTP proxy is the default mode and most commonly used, however the SOCKS proxy yields
+more true-to-life performance.</p>
+
+<p>You can configure the ports on which Charles listens for the HTTP and SOCKS proxy as well as enable or disable the SOCKS proxy.
+The HTTP proxy is always enabled.</p>
+
+<h3>Using Proxies</h3>
+<p>The proxy method used will depend upon the configuration of your application or OS. See the OS or browser specific tabs in
+the Proxy Settings, or see
+the configuration in your application for which port it is connecting to.</p>
+
+<h3>Dynamic ports</h3>
+<p>Enable the dynamic ports option to listen on a dynamic port, chosen each time Charles starts. This avoids conflicts with
+other network services that may be running on your computer, including other instances of Charles if it is a shared computer.</p>
+
+<h3>Transparent HTTP Proxying</h3>
+<p>Transparent proxying enables Charles to support clients who do not support HTTP proxy servers, or who are not aware that
+they are using an HTTP proxy server such as if a TCP/IP connection is redirected through Charles by a router or firewall.</p>
+
+<h3>SOCKS Proxy</h3>
+<p>The SOCKS proxy can proxy any protocol, not just HTTP and HTTPS, so you may see raw socket streams being
+proxied through Charles with the SOCKS proxy configured.</p>
+<p>It is recommended to enable HTTP proxying over SOCKS. That identifies HTTP traffic and
+improves the display of it in Charles to match the behaviour when using the HTTP proxy. To achieve this Charles
+recognises some ports as carrying HTTP traffic. You may need to add to or change this list to suit your needs.
+In this way the SOCKS proxy may require more configuration than the HTTP proxy.</p>
+
+<h3>SOCKS Proxy Performance</h3>
+<p>
+Browsers limit the number of connections they will have open to a web server, in order to not overload the server. 
+The HTTP/1.1 specification states that a browser should limit itself to 2 connections per server. For HTTP/1.0 there are 
+non-standardized limits across different browsers.
+</p>
+<p>
+This limit can cause loading problems with websites as only 2 files (pages / images / css / javascript etc) can be downloaded at once. 
+To get around this issue, developers sometimes distribute resources across different servers. For instance, http://maps.google.com/ 
+loads map tiles from mt0.google.com through mt3.google.com. That is 4 different server names, so even though these may actually all 
+resolve to the same IP address and the same physical server, the browser treats them as different web sites each allowed 2 connections. 
+This means that it can load 8 map tile images concurrently rather than the usual 2.
+</p>
+<p>
+When browsers use an HTTP proxy (such as Charles in HTTP proxy mode) they impose various different limits and also limit the total 
+number of connections to the proxy server itself, thus subtley changing the behaviour and performance of websites. 
+Charles is intended to have as little effect as possible on the regular performance of the web browser but in this case is at the
+mercy of the HTTP specification and browsers' behaviour with HTTP proxies.
+</p>
+<p>
+Fortunately when browsers use a SOCKS proxy the proxy is ignored in the calculation of connection limits, so the browser behaviour and performance is as normal.
+Therefore if you are performance testing a website or concerned about performance you should consider using Charles in SOCKS proxy mode.
+</p>
+

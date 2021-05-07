@@ -1,0 +1,18 @@
+<h2>Port Forwarding</h2>
+<p>Port forwarding enables you to transparently forward a local TCP or UDP port to a
+remote host and port. All the requests and responses on the port may be recorded in Charles.</p>
+
+<p>The port forwarding traffic is recorded in Charles as a socket://host:port/ URL</p>
+
+<p>
+Port forwarding is useful if you have a non-HTTP application that you want to monitor with Charles.
+Create a port forward to the original destination server and then connect the client application
+to the local port; the port forwarding is transparent to the client application and enables you to
+view the traffic in Charles where you previously may not have been able to.
+</p>
+
+<h3>Examples</h3>
+<p>You can forward TCP port 2525 on your local host to port 25 on a remote host. Then when you connect to localhost:2525
+Charles will transparently forward the traffic to the remote host as if you had connected directly. You will see
+the traffic recorded in Charles as socket://localhost:2525/.
+</p>

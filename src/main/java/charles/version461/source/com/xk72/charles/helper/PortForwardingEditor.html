@@ -1,0 +1,24 @@
+<h2>Port Forwarding</h2>
+
+<h3>Protocol</h3>
+<p>Choose either TCP or UDP protocol for the forwarding. TCP is the most common Internet protocol; UDP is most commonly used for DNS or real-time applications
+such as streaming.</p>
+
+<h3>Start Port / End Port</h3>
+<p>
+The Start Port is the local port that you want to forward. If you want to forward a range of ports you can enter in an End Port, 
+otherwise you may leave the End Port field blank.
+</p>
+
+<h3>Remote Host and Port</h3>
+<p>
+The remote host and port to forward to. If you have entered a range of ports using the End Port field the same range of ports
+will be forwarded to using the remote port as the base port.
+</p>
+
+<h4>Listen On A Specific Address</h4>
+<p>
+If you want to specify the local address to listen on for the reverse proxy you can enable this option and enter in the IP address here.
+This is useful if you want to run multiple network services on the same port but on different IP addresses on the same machine.
+When this option is disabled the reverse proxy binds to all available local addresses.
+</p>

@@ -1,0 +1,82 @@
+<h2>Location matching</h2>
+<p>
+The location match contains protocol, host, port and path fields that may be used to match the URL of the request.
+Any of the fields may be left blank, in which case they will match any value.
+</p>
+
+<h3>Wildcards</h3>
+<p>Wildcards are supported using either *, ? or character ranges [...]. The * matches zero or more characters. The ? matches one character.
+Character ranges match one character in the range, eg. [a-z] or [aeiou].</p>
+
+<h3>Paths</h3>
+<p>
+To match subpaths you must end your path with a /*. <b>NOTE:</b> In previous versions of Charles this was implicit, but it is now required.
+</p>
+
+<h3>Query</h3>
+<p>
+The query field matches the query string contents. Do not include the ? that starts the query string.
+Note that the ? character is a wildcard character.
+</p>
+<p>
+The query field can include wildcards, like the other fields, so you can do queries such as: "*page=1*" to match "page=1" anywhere
+in the query string.
+</p>
+
+<h3>Common Uses</h3>
+<p>
+To match every request to a given host enter the hostname and leave the other fields blank.
+To match every request to a given path on a host enter the hostname and the path ending with a /, leave the other fields blank.
+To match every file with a given suffix on a host enter the hostname and /*.suffix, leave the other fields blank.
+</p>
+
+<h3>Examples</h3>
+<table border="1">
+	<tr>
+		<th>Host</th>
+		<th>Path</th>
+		<th>Result</th>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td></td>
+		<td>Matches all requests to host charlesproxy.com</td>
+	</tr>
+	<tr>
+		<td>*.charlesproxy.com</td>
+		<td></td>
+		<td>Matches all requests to hosts ending in .charlesproxy.com</td>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td>/charles/</td>
+		<td>Matches all requests to charlesproxy.com/charles/ only</td>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td>/charles/*</td>
+		<td>Matches all requests to charlesproxy.com/charles/ including files and subpaths</td>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td>/charles</td>
+		<td>Matches all requests to charlesproxy.com/charles only</td>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td>/index.html</td>
+		<td>Matches all requests to charlesproxy.com/charles.html only</td>
+	</tr>
+	<tr>
+		<td>charlesproxy.com</td>
+		<td>/*.html</td>
+		<td>Matches all requests to files ending in .html on host charlesproxy.com</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>/charles/*.html</td>
+		<td>Matches all requests to files ending in .html under the path /charles/ (including subpaths) on any host</td>
+	</tr>
+</table>
+
+<p>Protocol and port matches can be added to the above to further narrow the location match.</p>

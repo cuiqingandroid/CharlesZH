@@ -1,0 +1,45 @@
+<h2>Local Mapping</h2>
+<p>A local mapping consists of a location match and the local directory from which to try to serve the matches.</p>
+<p>Files are searched for in the local directory using the relative path. The relative path is the part of the
+requested location left over after the path part of the match. This is best explained by the examples below.</p>
+
+<p>Local mappings can be case-sensitive, so that regardless of whether your local filesystem is in fact
+case-sensitive, the local mapping will always check the case. Case-sensitivity is the default.</p>
+
+<h3>Examples</h3>
+<p>The following examples help to explain how the location match relates to the local directory. The "local"
+column is presented as relative to the local directory.</p>
+<table border="1">
+	<tr>
+		<th>Host</th>
+		<th>Path</th>
+		<th>Request</th>
+		<th>Local</th>
+	</tr>
+	<tr>
+		<td>xk72.com</td>
+		<td></td>
+		<td>xk72.com/charles/index.php</td>
+		<td>charles/index.php</td>
+	</tr>
+	<tr>
+		<td>xk72.com</td>
+		<td>/charles/</td>
+		<td>xk72.com/charles/index.php</td>
+		<td>index.php</td>
+	</tr>
+	<tr>
+		<td>xk72.com</td>
+		<td>/*.php</td>
+		<td>xk72.com/charles/index.php</td>
+		<td>charles/index.php</td>
+	</tr>
+	<tr>
+		<td>xk72.com</td>
+		<td>/charles/*.php</td>
+		<td>xk72.com/charles/index.php</td>
+		<td>index.php</td>
+	</tr>
+</table>
+
+@@tools.gen.locations.locationMatchingEditor@@

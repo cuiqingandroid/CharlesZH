@@ -1,0 +1,17 @@
+<h2>Breakpoints Tool</h2>
+<p>The Breakpoints tool lets you intercept requests and responses before they are passed through Charles. You can
+examine and edit the request or response and then decide whether to allow it to proceed or to block it.</p>
+
+<p>Each breakpoint matches a URL using location matching patterns, see below. Each breakpoint is also assigned
+to either the request, or response, or both so you break exactly where you want.</p>
+
+<h3>How it works</h3>
+<p>When a request or response trips a breakpoint the Breakpoints window automatically opens in Charles and comes to the front. The 
+Breakpoints window contains a list of the requests and responses currently intercepted and waiting for your action. Select
+the request or response to view and edit the contents. Then decide to Execute, Abort or Cancel the breakpoint.</p>
+
+<p>The Execute button applies any changes that you have made and lets the request or response proceed. The Abort button
+blocks the request or response and sends an error message to the client. The Cancel button discards any changes that you
+have made and lets the request or response proceed as if it wasn't intercepted.</p>
+
+@@tools.gen.locations.locationMatching@@

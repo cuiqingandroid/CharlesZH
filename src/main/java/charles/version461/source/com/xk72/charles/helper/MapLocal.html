@@ -1,0 +1,40 @@
+<h2>Map Local Tool</h2>
+<p>
+The Map Local tool enables you to use local files as if they were part of a remote website.
+You can develop your files locally and test them as if they were live.
+The contents of the local file is returned to the client as if it was the normal remote response.
+</p>
+
+<p>
+Map Local can greatly speed development and testing in the case where you would otherwise have to upload files to 
+a website to test the results. With Map Local you can test safely in your development environment.
+</p>
+
+<h3>Dynamic files</h3>
+<p>Dynamic files, such as files containing server-side scripting,
+aren't executed by Map Local so if there is any script in the file that script will be returned to the browser
+as is - probably not the intended result.
+</p>
+<p>
+If you'd like to use dynamic files as if they were part of a remote website,
+see the Map Remote tool.
+</p>
+
+<h3>How it works</h3>
+<p>
+When a request matches a Map Local mapping it checks for a local file matching the path. 
+It does not include the query string, if there is one. If the requested file is found locally
+then it is returned as the response, as if it was loaded from the remote site so it is
+transparent to the client. If the requested file isn't found locally then the request will be
+served by the website as usual.
+</p>
+
+<h3>Examples</h3>
+<p>If you are testing css, swf or image changes you can map those file types to your local development
+copy of the website so you can browse the live site with all your development assets. Create a mapping
+from live.com/*.css to the root of your local development copy, and similar mappings for the other file types.
+Alternatively you can map whole directories or individual files as required.
+</p>
+
+@@tools.gen.locations.locationMatching@@
+
