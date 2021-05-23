@@ -12,7 +12,7 @@ public abstract class VersionModifier {
     public abstract boolean modifyByteCode();
     public abstract String getSourcePath();
 
-    protected final String getSavePath(){
+    public final String getSavePath(){
         return mSavePath;
     }
 

@@ -2,6 +2,7 @@ package charles.version461;
 
 import charles.VersionModifier;
 import charles.version461.modifiers.BundleStringEncodingModifier;
+import charles.version461.modifiers.JavaSourceReplace;
 import charles.version461.modifiers.MenuEncodingModifier;
 import charles.version461.modifiers.SourceModifier;
 import javassist.CannotCompileException;
@@ -25,6 +26,7 @@ public class Modifier461 extends VersionModifier {
             BundleStringEncodingModifier.modify(classPool, getSavePath());
             SourceModifier.copySource(getSourcePath(), getSavePath());
             MenuEncodingModifier.modify(classPool, getSavePath());
+            JavaSourceReplace.modify(classPool, getSavePath());
             return true;
         } catch (NotFoundException | CannotCompileException | IOException e) {
             e.printStackTrace();
