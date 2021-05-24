@@ -3,6 +3,7 @@ package charles.version461.modifiers;
 import charles.version461.mirror.mukF;
 import charles.version461.extension.HelpMenuUrl;
 import javassist.*;
+import javassist.bytecode.ClassFile;
 
 import java.io.IOException;
 
@@ -24,6 +25,7 @@ public class JavaSourceReplace {
 
     private static void addExtensionClass(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
         CtClass ctClass = classPool.getCtClass(HelpMenuUrl.class.getName());
+        ctClass.setName("com.xk72.charles.gui.menus.HelpMenuUrl");
         // 修改包路径
         ctClass.writeFile(savePath);
     }
@@ -32,11 +34,11 @@ public class JavaSourceReplace {
      * help menu增加菜单
      */
     private static void addHelpMenu(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-//        CtClass ctClass = classPool.get("com.xk72.charles.gui.menus.HelpMenu");
-//        CtConstructor ctConstructor = ctClass.getConstructors()[0];
-//        ctConstructor.insertAfter("{" +
-//                "add(new charles.version461.extension.HelpMenuUrl(\"翻译支持\",\"https://github.com/cuiqingandroid/CharlesZH\"));" +
-//                "}");
-//        ctClass.writeFile(savePath);
+        CtClass ctClass = classPool.get("com.xk72.charles.gui.menus.HelpMenu");
+        CtConstructor ctConstructor = ctClass.getConstructors()[0];
+        ctConstructor.insertAfter("{" +
+                "add(new com.xk72.charles.gui.menus.HelpMenuUrl(\"翻译支持\",\"https://github.com/cuiqingandroid/CharlesZH\"));" +
+                "}");
+        ctClass.writeFile(savePath);
     }
 }
