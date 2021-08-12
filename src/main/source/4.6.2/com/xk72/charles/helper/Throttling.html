@@ -1,0 +1,52 @@
+<h2>Throttle Settings</h2>
+<p>
+Throttling allows you to restrict the available bandwidth client applications, such as web browsers, may use to access remote servers.  
+You can also introduce additional latency, reliability and stability constraints.  
+This functionality allows you to simulate various connection situations, such as slow, high latency or unstable internet connections.
+</p>
+
+@@tools.gen.locations.selectedLocations@@
+
+<h3>Throttle Presets</h3>
+<p>
+There are a number of pre-defined throttle presets that simulate common internet connection types.  
+New presets may be created by editing the throttle settings of an existing preset and selecting 'Add Preset'.
+Presets that you create may be removed later.  The pre-defined presets cannot be removed.
+</p>
+
+<h3>Bandwidth</h3>
+<p>
+Bandwidth defines the maximum amount of data that can be transferred over time, it is specified in kilobits per second.  You can specify different bandwidth limits for upload and download links.
+</p>
+
+<h3>Utilisation</h3>
+<p>
+Utilisation is the percentage of the total bandwidth that can be used at any one time.  It is simply applied as a scaling factor on the available bandwidth.  
+For most modern internet connections utilisation is always 100%.
+</p>
+
+<h3>Latency</h3>
+<p>
+Latency measures the delay in milliseconds on the first round-trip communication between the client and remote server.  It is only applied once for each request from client to server.
+</p>
+
+<h3>MTU</h3>
+<p>
+MTU is the maximum transmission unit, the largest size for a TCP packet in any transmission.  
+Specifying the MTU doesn't change the available bandwidth but allows Charles to allocate the bandwidth in MTU sized chunks, resulting in a realistic level of packet fragmentation in each transmission.
+</p>
+
+<h3>Reliability</h3>
+<p>
+Reliability is a measure of how likely a connection is to fail completely.  This is useful for simulating unreliable network conditions.  
+Reliability is specified as the likelihood of successfully transmitting a 10KiB message, so a value of 50% means that half of all 10KiB transmissions will succeed.
+Larger messages or smaller messages are more or less likely to fail respectively, so that a 20KiB transmission would have only a 25% success rate and a 5KiB transmission approximately 70% success rate.
+</p>
+
+<h3>Stability</h3>
+<p>
+Stability is a measure of how likely a connection is to be 'unstable' and therefore have reduced quality.  
+This is useful for simulating networks, such as mobile networks, that periodically have poor connection quality.
+If a connection is unstable then the quality of the connection will fall randomly in the unstable quality range.  
+This quality value is then applied as another scaling factor on the available bandwidth.
+</p>

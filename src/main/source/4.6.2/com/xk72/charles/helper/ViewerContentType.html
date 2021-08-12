@@ -1,0 +1,24 @@
+<h2>Viewer Content Type Mapping</h2>
+<p>
+The Viewer Content Type Mappings allow you to explicitly map selected locations to particular viewer content types.
+This will automatically enable the appropriate content type specific viewers when viewing requests from those
+locations.
+</p>
+
+<p>
+Normally Charles attempts to automatically detect the appropriate viewer content type based upon the content of the
+request or response, usually based on the Content-Type header.  However some websites do not set the correct 
+Content-Type value for their content so not all of the appropriate content viewers are available.  Configuring
+appropriate viewer content type mappings for these locations will allow you to view these requests with the
+best possible viewers.
+</p>
+
+<h3>How it works</h3>
+<p>
+When a request that matches one of the configured mappings is viewed within Charles any viewers that are appropriate
+for the configured viewer content type are enabled in addition to the automatically detected viewers.  No changes are
+made to the actual request or response.
+</p>
+
+@@tools.gen.locations.locationMatching@@
+

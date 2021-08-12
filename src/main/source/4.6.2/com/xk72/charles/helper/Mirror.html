@@ -1,0 +1,28 @@
+<h2>Mirror Tool</h2>
+<p>The Mirror tool saves responses to disk as they are received, creating a mirror copy of websites as you browse them.</p>
+
+<p>The responses are saved in the same directory structure as the website, with a root directory created for the hostname.
+File names are derived from the URL and converted to be suitable for saving. Query strings are included in the filename.</p>
+
+<p>If two responses are received for the same URL they overwrite each other, so you will always have the latest response
+saved in the mirror.</p>
+
+<p>The Mirror tool saves responses as they stream through Charles, therefore it is not effected by the recording limit set in
+the Recording Settings.</p>
+
+@@tools.gen.locations.selectedLocations@@
+
+<h3>Alternative</h3>
+<p>Rather than using the Mirror tool you can also right-click on a node in the tree in Charles to save all the responses
+to disk after you've recorded them; that may prove to be an easier approach than configuring this tool.
+The only exception to this is that the Mirror tool is not limited by the recording limit set in the Recording Settings,
+whereas saving responses later is limited so very large responses will be lost.</p>
+
+<h3>Side Effects</h3>
+<p>
+If the Mirror tool is enabled for a request it will cause any compressed or encoded responses to be decoded.
+So if the server delivers a compressed response it will be decompressed by Charles before being passed on
+to the client, which usually won't have any effect but you may notice if you have built your own client or
+if the client is expecting compressed responses. With web browsers there is no effect.
+</p>
+

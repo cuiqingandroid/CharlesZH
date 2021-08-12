@@ -1,18 +1,21 @@
-package charles.version461.modifiers;
-
-import charles.version461.mirror.mukF;
-import charles.version461.extension.HelpMenuUrl;
-import javassist.*;
-import javassist.bytecode.ClassFile;
+package charles.version462.modifiers;
 
 import java.io.IOException;
 
+import charles.version461.extension.HelpMenuUrl;
+import charles.version461.mirror.mukF;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtMethod;
+import javassist.NotFoundException;
+
 public class JavaSourceReplace {
     public static void modify(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-        addExtensionClass(classPool, savePath);
-        replaceJavaClass(classPool, savePath);
-        addHelpMenu(classPool, savePath);
-        register(classPool, savePath);
+//        addExtensionClass(classPool, savePath);
+//        replaceJavaClass(classPool, savePath);
+//        addHelpMenu(classPool, savePath);
     }
 
     private static void replaceJavaClass(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
@@ -21,7 +24,6 @@ public class JavaSourceReplace {
         // 修改包路径
         ctClass.setName("com.xk72.charles.gui.transaction.general.mukF");
         ctClass.writeFile(savePath);
-
     }
 
     private static void addExtensionClass(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
@@ -43,12 +45,5 @@ public class JavaSourceReplace {
         ctClass.writeFile(savePath);
     }
 
-    private static void register(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-        CtClass ctClass = classPool.get("com.xk72.charles.p");
-        CtMethod ctMethod =ctClass.getDeclaredMethod("a",null);
-        ctMethod.setBody("{return true;}");
-        ctMethod = ctClass.getDeclaredMethod("c",null);
-        ctMethod.setBody("{return \"cuiqing\";}");
-        ctClass.writeFile();
-    }
+
 }

@@ -1,0 +1,12 @@
+<h2>Charles Root Certificates</h2>
+<p>Charles uses its own Root SSL certificate for SSL requests through Charles to hosts enabled for <em>SSL Proxying</em>. The Root
+certificate is generated automatically for each Charles installation.</p>
+
+<p>Because Charles has signed the Root certificate itself, it won't be trusted by your browsers or applications. In order to use the 
+<em>SSL Proxying</em> feature in Charles you therefore need to add the Root certificate for your copy of Charles to the 
+trust-store on your OS, and perhaps in your browser.</p>
+
+<p>Use the options in the SSL submenu in the Help menu in Charles to help install the Root certificate. You can install the certificate
+on the current OS, or on remote devices or browsers.</p>
+
+<p>To install the certificate in Mozilla Firefox, first configure Firefox to use Charles as its proxy then browse to chls.pro/ssl.</p>

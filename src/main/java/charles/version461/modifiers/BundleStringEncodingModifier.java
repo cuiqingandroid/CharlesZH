@@ -1,8 +1,12 @@
 package charles.version461.modifiers;
 
-import javassist.*;
-
 import java.io.IOException;
+
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
 
 public class BundleStringEncodingModifier {
     public static void modify(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
@@ -21,5 +25,12 @@ public class BundleStringEncodingModifier {
                 "$1 = new String($1.getBytes(\"ISO-8859-1\"), \"utf-8\");\n"+
                 "    return $1;}");
         ctClass.writeFile(savePath);
+
+
+
+
+
     }
+
+
 }

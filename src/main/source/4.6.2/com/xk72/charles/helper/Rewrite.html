@@ -1,0 +1,19 @@
+<h2>Rewrite Tool</h2>
+<p>The Rewrite tool enables you to create rules that modify requests and responses as they pass through Charles. Rules such as
+adding or changing a header or search and replace some text in the response body.</p>
+
+<h3>Rewrite Sets</h3>
+<p>Rewrite sets can be individual activated and deactivated. Each set contains a list of locations and rules. The locations
+choose the requests and responses on which the rules will operate.</p>
+
+<h3>Rewrite Rules</h3>
+<p>Each rule describes a single rewrite operation. The rule may affect the headers, the body, or parts of the request URL; it may operate
+on the request and or the response; it may then define search and replace or just replace style rewriting.</p>
+<p>More documentation for the rewrite rules is available in the Rewrite Rule editing dialog.</p>
+
+@@tools.gen.locations.locationMatching@@
+
+<h3>Debugging</h3>
+<p>The Rewrite tool can be difficult to debug when your rewrite operation isn't working as expected. If you have trouble try including a very basic rule
+such as one that adds an obvious header, so you can see whether your rules are matching the request at all. Also turn on Debug in Error Log to get some
+debugging information printed in the Error Log accessed from the Window menu in Charles.</p>

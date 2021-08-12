@@ -10,7 +10,6 @@ public class MenuEncodingModifier {
     public static void modify(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
         modifyViewMenu(classPool, savePath);
         modifySessionMenu(classPool, savePath);
-
     }
 
     /**
@@ -21,7 +20,6 @@ public class MenuEncodingModifier {
         CtConstructor ctConstructor = ctClass.getConstructors()[0];
         ctConstructor.setBody("{kbzH = (javax.swing.Action)new com.xk72.charles.CharlesGUIFileManager$1(this, \"打开会话\",\"打开之前的会话\");ERKX = (javax.swing.Action)new com.xk72.charles.CharlesGUIFileManager$2(this, \"导入\", \"导入文件到会话\");}");
         ctClass.writeFile(savePath);
-
     }
 
     /**

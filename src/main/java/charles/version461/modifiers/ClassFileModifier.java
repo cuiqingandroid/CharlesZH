@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class SourceModifier {
+public class ClassFileModifier {
     public static void copySource(String sourcePath,String savePath){
         System.out.println();
         copy(sourcePath, sourcePath, savePath);

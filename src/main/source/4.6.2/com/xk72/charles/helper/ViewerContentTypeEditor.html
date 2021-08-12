@@ -1,0 +1,15 @@
+<h2>Viewer Content Type Mapping</h2>
+<p>A viewer content type mapping consists of a location match and the desired request and response viewer content type.</p>
+<p>You may specify a desired request type or response type or both.  You may also specify neither a request or response
+type in which case the mapping will have no effect.  It is more usual to specify a response type as you are more likely
+to be interested in the viewing of response content than the request content (which is often empty)</p>
+
+<h3>Viewer Content Types</h3>
+
+<p>The viewer content types that may be selected relate to the types of specialised viewers that Charles has available
+(e.g. XML, Javascript and Protocol Buffers) and not to generic MIME types.  For most of the viewer content types there is
+no further information to specify, the exception to this is the Protocol Buffers content type.  When you select the 
+Protocol Buffers content type you may specify the location (URL) of the protocol buffers descriptor file, the name of the
+message type and whether the content is a single message or a delimited list of messages.</p>
+
+@@tools.gen.locations.locationMatchingEditor@@

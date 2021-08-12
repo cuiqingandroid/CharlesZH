@@ -1,0 +1,11 @@
+<h2>Block Cookies Tool</h2>
+<p>The Block Cookies tool blocks the sending and receiving of cookies. It can be used to test websites as if you have
+cookies disabled in your browser. Note that web spiders (such as Google) often don't support Cookies so the tool can
+also be used to simulate a spider's view of a website.</p>
+
+@@tools.gen.locations.selectedLocations@@
+
+<h3>How it works</h3>
+<p>The Cookie header is removed from requests, preventing cookie values being sent from the client application (eg. web browser)
+to the remote server. The Set-Cookie header is removed from responses, preventing requests to set cookies being received
+by the client application from the remote server.</p>

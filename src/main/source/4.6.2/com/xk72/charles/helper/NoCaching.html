@@ -1,0 +1,22 @@
+<h2>No Caching Tool</h2>
+<p>
+The No Caching tool prevents client applications, such as web browsers, from caching any resources. Therefore requests are always
+made to the remote website and you always see the latest version.</p>
+
+@@tools.gen.locations.selectedLocations@@
+
+<h3>About caching</h3>
+<p>
+Caching enables a client application, such as a web browser, to use a local copy of a response rather than
+requesting it from the website. Caching is a very important part of the web as often the same resources are reused across multiple pages,
+and having to reload each resource for each page would greatly slow down the browsing experience. However caching can mean
+that you are not seeing the latest version of a resource, which is a problem when you're developing a web application -
+you want to always see your latest changes.
+</p>
+
+<h3>How it works</h3>
+<p>The No Caching tool prevents caching by manipulating the HTTP headers that control the caching of responses. The If-Modified-Since and If-None-Match
+headers are removed from requests, Pragma: no-cache and Cache-control: no-cache are added. The Expires, Last-Modified and ETag headers are removed 
+from responses and Expires: 0 and Cache-Control: no-cache are added.</p>
+
+

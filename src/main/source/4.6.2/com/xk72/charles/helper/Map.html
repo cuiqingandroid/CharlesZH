@@ -1,0 +1,27 @@
+<h2>Map Remote Tool</h2>
+<p>The Map Remote tool changes the request location, per the configured mappings, so that the response
+is transparently served from the new location as if that was the original request.</p>
+<p>This mapping enables you to serve all or part of one site from another. For example, you could serve
+a subdirectory of one site for another with a mapping from xk72.com/charles/ to localhost/charlesdev/, 
+or serve all files with a given suffix from another site with a mapping from xk72.com/*.php to localhost/charlesdev/.</p>
+
+<h3>Usage Suggestions</h3>
+<p>Map Remote is useful if you have a development version of a site and would like to be able to browse the live
+site with some of the requests being served from development. For example, you may want to serve the css and images
+directories from your development server. Use a mapping like live.com/css/ to dev.com/css/ or live.com/*.css to dev.com.
+
+<h3>Mapping Types</h3>
+<ul>
+<li>You can map directory to directory, such as xk72.com/charles/ to localhost/charlesdev/</li>
+<li>You can map file to file, such as xk72.com/charles/download.php to abc.com/testing/test.html</li>
+<li>You can map directory with file pattern to directory, such as xk72.com/charles/*.php to localhost/charlesdev/</li>
+</ul>
+
+<p>If you don't specify a path in the destination mapping then the path part of the URL will not be changed. If you want
+to map to the root directory, put a / in the destination path field.</p>
+
+<h3>Map Local</h3>
+<p>Also see the Map Local tool, which can serve requests from local files so you can use the latest development
+files from your computer as if they were part of a remote website.</p>
+
+@@tools.gen.locations.locationMatching@@

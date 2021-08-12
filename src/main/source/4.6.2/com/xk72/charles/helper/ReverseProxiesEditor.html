@@ -1,0 +1,40 @@
+<h3>Local Port</h3>
+<p>The port on the localhost to create the reverse proxy on. This field may be automatically populated with an available port. If there is
+another application using that port you will receive a warning message when the reverse proxy starts.</p>
+<p>eg. Given a local port of 8001 you will connect to the reverse proxy at http://localhost:8001/</p>
+
+<h3>Remote Host and Port</h3>
+<p>The hostname or IP address and port of the remote host that is the destination of the reverse proxy.
+The remote port defaults to 80 which is the default port for HTTP.</p>
+<p>eg. Enter a remote host of xk72.com and a remote port of 80, then http://localhost:8001/ will be as if you had connected
+to http://xk72.com/</p>
+
+<h3>Options</h3>
+
+<h4>Rewrite Redirects</h4>
+<p>
+Redirect responses from the remote server will be rewritten to match the
+reverse proxy source address. Defaults to on.
+</p>
+<p>Redirect responses from the remote server are to fully qualified
+URLs even if they are within the same website. If the redirect is to the remote server address it is necessary to rewrite 
+it to the reverse proxy local address, otherwise the client will use the redirect URL to
+the remote host and thus no longer be connecting through the reverse proxy.
+</p>
+
+<h4>Preserve Host Header</h4>
+<p>
+The Host HTTP header is passed unchanged from the incoming request,
+instead of the normal rewriting of the Host header to match the reverse proxy remote host.
+Defaults to off.
+</p>
+<p>
+Preserving the Host header is only necessary if you have specific requirements; it is not required for ordinary use.
+</p>
+
+<h4>Listen On A Specific Address</h4>
+<p>
+If you want to specify the local address to listen on for the reverse proxy you can enable this option and enter in the IP address here.
+This is useful if you want to run multiple network services on the same port but on different IP addresses on the same machine.
+When this option is disabled the reverse proxy binds to all available local addresses.
+</p>

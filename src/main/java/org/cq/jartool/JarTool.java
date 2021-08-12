@@ -191,19 +191,28 @@ public class JarTool {
     private boolean ok;
 
     /**
-     * Starts main program with the specified arguments.
+     * 压缩文件到jar包中
+     * @param targetJarFile 原始jar包
+     * @param sourcePath    需要替换或者新增的文件
+     * @param outFile       新的jar包，空会压缩到原jar包
+     * @return
      */
-    @SuppressWarnings({"removal"})
-    public synchronized boolean run(String targetJarFile, String sourcePath, String outFile) {
+    public static boolean artifactFiles(String targetJarFile, String sourcePath, String outFile) {
+        JarTool jarTool = new JarTool();
+        return jarTool.run(targetJarFile, sourcePath, outFile);
+    }
+
+    /**
+     * Starts main program with the specified arguments.
+     * @param
+     */
+    private synchronized boolean run(String targetJarFile, String sourcePath, String outFile) {
         ok = true;
-//        if (!parseArgs(args)) {
-//            return false;
-//        }
         fname = targetJarFile;
         this.foutname = outFile;
         filesMap.put(BASE_VERSION, new String[]{sourcePath});
         pathsMap.put(BASE_VERSION, new HashSet<>());
-        pathsMap.get(BASE_VERSION).add("./4.6.1");
+        pathsMap.get(BASE_VERSION).add(sourcePath.replace(File.separatorChar, '/'));
         File tmpFile = null;
         uflag = true;
         try {
@@ -285,222 +294,6 @@ public class JarTool {
         Set<String> cpaths = pathsMap.get(version);
         return Stream.of(fileEntries.getValue())
                 .map(f -> toVersionedName(toEntryName(f, cpaths, false), version));
-    }
-
-//    /**
-//     * Parses command line arguments.
-//     */
-    boolean parseArgs(String args[]) {
-        /* Preprocess and expand @file arguments */
-        try {
-            args = CommandLine.parse(args);
-        } catch (FileNotFoundException e) {
-            fatalError(formatMsg("error.cant.open", e.getMessage()));
-            return false;
-        } catch (IOException e) {
-            fatalError(e);
-            return false;
-        }
-        /* parse flags */
-        int count = 1;
-        try {
-            String flags = args[0];
-
-            // Note: flags.length == 2 can be treated as the short version of
-            // the GNU option since the there cannot be any other options,
-            // excluding -C, as per the old way.
-            if (flags.startsWith("--") ||
-                    (flags.startsWith("-") && flags.length() == 2)) {
-//                try {
-//                    count = GNUStyleOptions.parseOptions(this, args);
-//                } catch (GNUStyleOptions.BadArgs x) {
-//                    if (info == null) {
-//                        if (x.showUsage) {
-//                            usageError(x.getMessage());
-//                        } else {
-//                            error(x.getMessage());
-//                        }
-//                        return false;
-//                    }
-//                }
-                if (info != null) {
-                    info.accept(out);
-                    return true;
-                }
-            } else {
-                // Legacy/compatibility options
-                if (flags.startsWith("-")) {
-                    flags = flags.substring(1);
-                }
-                for (int i = 0; i < flags.length(); i++) {
-                    switch (flags.charAt(i)) {
-                        case 'c':
-                            if (xflag || tflag || uflag || iflag) {
-                                usageError(getMsg("error.multiple.main.operations"));
-                                return false;
-                            }
-                            cflag = true;
-                            break;
-                        case 'u':
-                            if (cflag || xflag || tflag || iflag) {
-                                usageError(getMsg("error.multiple.main.operations"));
-                                return false;
-                            }
-                            uflag = true;
-                            break;
-                        case 'x':
-                            if (cflag || uflag || tflag || iflag) {
-                                usageError(getMsg("error.multiple.main.operations"));
-                                return false;
-                            }
-                            xflag = true;
-                            break;
-                        case 't':
-                            if (cflag || uflag || xflag || iflag) {
-                                usageError(getMsg("error.multiple.main.operations"));
-                                return false;
-                            }
-                            tflag = true;
-                            break;
-                        case 'M':
-                            Mflag = true;
-                            break;
-                        case 'v':
-                            vflag = true;
-                            break;
-                        case 'f':
-                            fname = args[count++];
-                            break;
-                        case 'm':
-                            mname = args[count++];
-                            break;
-                        case '0':
-                            flag0 = true;
-                            break;
-                        case 'i':
-                            if (cflag || uflag || xflag || tflag) {
-                                usageError(getMsg("error.multiple.main.operations"));
-                                return false;
-                            }
-                            // do not increase the counter, files will contain rootjar
-                            rootjar = args[count++];
-                            iflag = true;
-                            break;
-                        case 'n':
-                            nflag = true;
-                            break;
-                        case 'e':
-                            ename = args[count++];
-                            break;
-                        case 'P':
-                            pflag = true;
-                            break;
-                        default:
-                            usageError(formatMsg("error.illegal.option",
-                                    String.valueOf(flags.charAt(i))));
-                            return false;
-                    }
-                }
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            usageError(getMsg("main.usage.summary"));
-            return false;
-        }
-        if (!cflag && !tflag && !xflag && !uflag && !iflag && !dflag) {
-            usageError(getMsg("error.bad.option"));
-            return false;
-        }
-
-        /* parse file arguments */
-        int n = args.length - count;
-        if (n > 0) {
-            int version = BASE_VERSION;
-            int k = 0;
-            String[] nameBuf = new String[n];
-            pathsMap.put(version, new HashSet<>());
-            try {
-                for (int i = count; i < args.length; i++) {
-                    if (args[i].equals("-C")) {
-                        if (dflag) {
-                            // "--describe-module/-d" does not require file argument(s),
-                            // but does accept --release
-                            usageError(getMsg("error.bad.dflag"));
-                            return false;
-                        }
-                        /* change the directory */
-                        String dir = args[++i];
-                        dir = (dir.endsWith(File.separator) ?
-                                dir : (dir + File.separator));
-                        dir = dir.replace(File.separatorChar, '/');
-
-                        boolean hasUNC = (File.separatorChar == '\\'&&  dir.startsWith("//"));
-                        while (dir.indexOf("//") > -1) {
-                            dir = dir.replace("//", "/");
-                        }
-                        if (hasUNC) { // Restore Windows UNC path.
-                            dir = "/" + dir;
-                        }
-                        pathsMap.get(version).add(dir);
-                        nameBuf[k++] = dir + args[++i];
-                    } else if (args[i].startsWith("--release")) {
-                        int v = BASE_VERSION;
-                        try {
-                            v = Integer.valueOf(args[++i]);
-                        } catch (NumberFormatException x) {
-                            error(formatMsg("error.release.value.notnumber", args[i]));
-                            // this will fall into the next error, thus returning false
-                        }
-                        if (v < 9) {
-                            usageError(formatMsg("error.release.value.toosmall", String.valueOf(v)));
-                            return false;
-                        }
-                        // associate the files, if any, with the previous version number
-                        if (k > 0) {
-                            String[] files = new String[k];
-                            System.arraycopy(nameBuf, 0, files, 0, k);
-                            filesMap.put(version, files);
-                            isMultiRelease = version > BASE_VERSION;
-                        }
-                        // reset the counters and start with the new version number
-                        k = 0;
-                        nameBuf = new String[n];
-                        version = v;
-                        releaseValue = version;
-                        pathsMap.put(version, new HashSet<>());
-                    } else {
-                        if (dflag) {
-                            // "--describe-module/-d" does not require file argument(s),
-                            // but does accept --release
-                            usageError(getMsg("error.bad.dflag"));
-                            return false;
-                        }
-                        nameBuf[k++] = args[i];
-                    }
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                usageError(getMsg("error.bad.file.arg"));
-                return false;
-            }
-            // associate remaining files, if any, with a version
-            if (k > 0) {
-                String[] files = new String[k];
-                System.arraycopy(nameBuf, 0, files, 0, k);
-                filesMap.put(version, files);
-                isMultiRelease = version > BASE_VERSION;
-            }
-        } else if (cflag && (mname == null)) {
-            usageError(getMsg("error.bad.cflag"));
-            return false;
-        } else if (uflag) {
-            if ((mname != null) || (ename != null)) {
-                /* just want to update the manifest */
-                return true;
-            } else {
-                usageError(getMsg("error.bad.uflag"));
-                return false;
-            }
-        }
-        return true;
     }
 
     /*

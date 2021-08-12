@@ -4,7 +4,7 @@ import charles.VersionModifier;
 import charles.version461.modifiers.BundleStringEncodingModifier;
 import charles.version461.modifiers.JavaSourceReplace;
 import charles.version461.modifiers.MenuEncodingModifier;
-import charles.version461.modifiers.SourceModifier;
+import charles.version461.modifiers.ClassFileModifier;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.NotFoundException;
@@ -23,10 +23,10 @@ public class Modifier461 extends VersionModifier {
         try {
             ClassPool classPool=ClassPool.getDefault();
             classPool.insertClassPath(getOriginJarPath());
-            BundleStringEncodingModifier.modify(classPool, getSavePath());
-            SourceModifier.copySource(getSourcePath(), getSavePath());
-            MenuEncodingModifier.modify(classPool, getSavePath());
-            JavaSourceReplace.modify(classPool, getSavePath());
+            BundleStringEncodingModifier.modify(classPool, getTempPath());
+            ClassFileModifier.copySource(getSourcePath(), getTempPath());
+            MenuEncodingModifier.modify(classPool, getTempPath());
+            JavaSourceReplace.modify(classPool, getTempPath());
             return true;
         } catch (NotFoundException | CannotCompileException | IOException e) {
             e.printStackTrace();
