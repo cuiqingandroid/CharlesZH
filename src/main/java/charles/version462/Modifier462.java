@@ -29,11 +29,12 @@ public class Modifier462 extends VersionModifier {
         try {
             ClassPool classPool=ClassPool.getDefault();
             classPool.insertClassPath(getOriginJarPath());
+            classPool.insertClassPath(getTempPath());
             modifyBundleStringEncoding(classPool, getTempPath());
             replaceSource();
 //            register(classPool, getSourcePath());
             MenuEncodingModifier.modify(classPool, getTempPath());
-//            JavaSourceReplace.modify(classPool, getTempPath());
+            JavaSourceReplace.modify(classPool, getTempPath());
             return true;
         } catch (NotFoundException | CannotCompileException | IOException e) {
             e.printStackTrace();

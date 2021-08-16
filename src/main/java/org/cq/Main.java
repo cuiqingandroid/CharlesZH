@@ -35,21 +35,26 @@ public class Main {
         new GUI();
     }
 
-    private static String translate(File originPath, boolean deleteTemp) {
+    private static String translate(File originPath, boolean deleteTemp, boolean newOutput) {
         String filename = originPath.getName();
-        String tempPath = new File(originPath.getParent(), filename+"_temp").getAbsolutePath();
-        String outputFilename = filename.substring(0, filename.lastIndexOf("."))+"_zh.jar";
-        File outputFile =  new File(originPath.getParent(), outputFilename);
+        String tempPath = new File(originPath.getParent(), filename + "_temp").getAbsolutePath();
+        String outputFilename = filename.substring(0, filename.lastIndexOf(".")) + "_zh.jar";
+        File outputFile;
+        if (newOutput) {
+            outputFile = new File(originPath.getParent(), outputFilename);
+        } else {
+            outputFile = originPath;
+        }
         VersionModifier modifier = VersionFactory.createVersionModifier(VersionFactory.V_462, originPath.getAbsolutePath(), tempPath);
         if (modifier != null) {
             boolean bytecodeModify = modifier.modifyByteCode();
             if (!bytecodeModify) {
                 return "翻译失败，请选择对应版本的charles.jar";
             }
-            if (outputFile.exists()) {
+            if (!newOutput && outputFile.exists()) {
                 outputFile.delete();
             }
-            if(JarTool.artifactFiles(originPath.getAbsolutePath(), modifier.getTempPath(), outputFile.getAbsolutePath())) {
+            if (JarTool.artifactFiles(originPath.getAbsolutePath(), modifier.getTempPath(), outputFile.getAbsolutePath())) {
                 System.out.println("done");
                 if (deleteTemp && new File(tempPath).exists()) {
                     try {
@@ -111,8 +116,6 @@ public class Main {
             int y = (height - h) / 2;
             jFrame.setLocation(x, y);
 
-            jFrame.add(this, BorderLayout.WEST);
-
             GridBagLayout lay = new GridBagLayout();
             setLayout(lay);
 
@@ -120,7 +123,7 @@ public class Main {
             JLabel tips = new JLabel("请选择charles.jar的文件路径，并保证读写权限");
             constraints.gridx = 1;
             constraints.gridy = 0;
-            constraints.weightx =5;
+            constraints.weightx = 5;
             add(tips, constraints);
 
 
@@ -144,12 +147,16 @@ public class Main {
             constraints.weightx = 1;
             add(jbSelectPath, constraints);
             jbSelectPath.addActionListener(e -> {
-                JFileChooser jfc=new JFileChooser();
+                JFileChooser jfc = new JFileChooser();
                 jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 jfc.showDialog(new JLabel(), "选择charles.jar文件");
-                File file=jfc.getSelectedFile();
-                jtfPath.setText(file.getAbsolutePath());
-                System.out.println("文件路径:"+jtfPath.getText());
+                File file = jfc.getSelectedFile();
+                if (file != null) {
+                    jtfPath.setText(file.getAbsolutePath());
+                    System.out.println("文件路径:" + jtfPath.getText());
+                } else {
+                    System.out.println("操作取消");
+                }
             });
 
 
@@ -157,28 +164,29 @@ public class Main {
             jbGenerate.setText("一键汉化");
             constraints.gridx = 1;
             constraints.gridy = 2;
-            constraints.weightx =2;
+            constraints.weightx = 2;
             add(jbGenerate, constraints);
             jbGenerate.addActionListener(e -> {
                 String path = jtfPath.getText();
                 if (path == null || path.length() <= 0) {
-                    JOptionPane.showMessageDialog(this,"请先选择原始charles.jar","报错",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "请先选择原始charles.jar", "报错", JOptionPane.ERROR_MESSAGE);
                 } else {
                     File file = new File(path);
                     if (file.exists()) {
-                        String errMsg = translate(file, false);
+                        String errMsg = translate(file, false, true);
                         if (errMsg == null) {
-                            JOptionPane.showMessageDialog(this,"翻译成功，替换charles.jar后重启charles","成功",JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "翻译成功，替换charles.jar后重启charles", "成功", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(this,errMsg,"报错",JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, errMsg, "报错", JOptionPane.ERROR_MESSAGE);
                         }
 
                     } else {
-                        JOptionPane.showMessageDialog(this,"选择的文件不存在","报错",JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "选择的文件不存在", "报错", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
 
+            jFrame.setContentPane(this);
             jFrame.setResizable(false);
             jFrame.setVisible(true);
 

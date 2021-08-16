@@ -3,6 +3,8 @@ package charles.version462.modifiers;
 import java.io.IOException;
 
 
+import javax.swing.JMenu;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -10,12 +12,15 @@ import javassist.CtConstructor;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-public class MenuEncodingModifier {
+public class MenuEncodingModifier extends JMenu{
     public static void modify(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
 //        modifyViewMenu(classPool, savePath);
 //        modifySessionMenu(classPool, savePath);
         modifyCharlesFrame(classPool, savePath);
         modifyActionSwitchboard(classPool, savePath);
+        modifyCompose(classPool, savePath);
+        editMenu(classPool, savePath);
+        copyUrl(classPool, savePath);
     }
 
     /**
@@ -139,6 +144,67 @@ public class MenuEncodingModifier {
                 "v.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"新建请求\");" +
                 "w.putValue(javax.swing.Action.NAME, \"重发请求\");" +
                 "w.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"重发选中请求\");" +
+                "x.putValue(javax.swing.Action.NAME, \"批量重发\");" +
+                "x.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"批量重复发送请求\");" +
+                "y.putValue(javax.swing.Action.NAME, \"验证\");" +
+                "y.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"验证选中请求\");" +
+                "z.putValue(javax.swing.Action.NAME, \"发布到Gist\");" +
+                "z.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"发送request和response到gist\");" +
+                "}");
+
+        ctClass.writeFile(savePath);
+        ctClass.detach();
+    }
+
+
+    /**
+     * 修改请求重发
+     */
+    private static void modifyCompose(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
+//        CtClass ctClass = classPool.get("com.xk72.charles.tools.ComposeTool");
+//        CtConstructor ctConstructor = ctClass.getConstructors()[0];
+//        ctConstructor.setBody("{" +
+//                "super(\"修改请求\");;" +
+//                "}");
+//
+//        ctClass.writeFile(savePath);
+//        ctClass.detach();
+//
+//        CtClass ctClass1 = classPool.get("com.xk72.charles.gui.session.actions.AbstractComposeAction");
+//        CtConstructor ctConstructor1 = ctClass1.getConstructors()[0];
+//        ctConstructor1.insertAfter("{" +
+//                "putValue(javax.swing.Action.NAME, \"修改请求\");" +
+//                "}");
+//
+//        ctClass1.writeFile(savePath);
+//        ctClass1.detach();
+    }
+
+    /**
+     * 右键菜单拷贝 URL
+     */
+    private static void copyUrl(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
+        CtClass ctClass = classPool.get("com.xk72.charles.gui.transaction.actions.CopyURLAction");
+        CtConstructor ctConstructor = ctClass.getConstructors()[0];
+        ctConstructor.insertAfter("{" +
+                "putValue(javax.swing.Action.NAME, \"复制URL\");" +
+                "}");
+
+        ctClass.writeFile(savePath);
+        ctClass.detach();
+    }
+
+    /**
+     * 右键菜单拷贝 URL
+     */
+    private static void editMenu(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
+        CtClass ctClass = classPool.get("com.xk72.charles.gui.menus.EditMenu");
+        CtConstructor ctConstructor = ctClass.getConstructors()[0];
+        ctConstructor.insertAfter("{" +
+                "getItem(0).getAction().putValue(javax.swing.Action.NAME, \"剪切\");" +
+                "getItem(1).getAction().putValue(javax.swing.Action.NAME, \"复制\");" +
+                "getItem(2).getAction().putValue(javax.swing.Action.NAME, \"粘贴\");" +
+                "getItem(3).getAction().putValue(javax.swing.Action.NAME, \"全选\");" +
                 "}");
 
         ctClass.writeFile(savePath);
