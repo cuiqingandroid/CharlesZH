@@ -80,13 +80,13 @@ public class Main {
     static class GUI extends JPanel {
 
         protected static final Insets spaceInsets = new Insets(10, 10, 4, 10);
-        JFrame jFrame;
+        private final JFrame jFrame;
 
         JComboBox<String> jComboBox;
         JTextField textField;
 
 
-        private void moveFrameToCenter(JFrame frame) {
+        private void moveFrameToCenter() {
             Toolkit kit = Toolkit.getDefaultToolkit();
             Dimension screenSize = kit.getScreenSize();
             int width = screenSize.width;
@@ -104,8 +104,8 @@ public class Main {
             desc.setLineWrap(true);
             desc.setMargin(new Insets(5, 5, 5, 5));
             desc.setOpaque(false);
-            addComponent( desc, 0, 0, 5, 1, spaceInsets,
-                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+            addComponent( desc, 0
+            );
 
         }
 
@@ -125,8 +125,8 @@ public class Main {
             }
 
             jPanel.add(jComboBox);
-            addComponent( jPanel, 0, 1, 5, 1, spaceInsets,
-                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+            addComponent( jPanel, 1
+            );
 
         }
 
@@ -161,8 +161,8 @@ public class Main {
             });
             jPanel.add(button);
 
-            addComponent( jPanel, 0, 2, 5, 1, spaceInsets,
-                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+            addComponent( jPanel, 2
+            );
         }
 
         protected void createOkButton() {
@@ -196,16 +196,15 @@ public class Main {
                 }
             });
 
-            addComponent( jPanel, 0, 4, 5, 1, spaceInsets,
-                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+            addComponent( jPanel, 4
+            );
 
         }
 
         protected void addComponent(Component component,
-                                    int gridx, int gridy, int gridwidth, int gridheight,
-                                    Insets insets, int anchor, int fill) {
-            GridBagConstraints gbc = new GridBagConstraints(gridx, gridy,
-                    gridwidth, gridheight, 1.0, 0, anchor, fill, insets, 0, 0);
+                                    int gridy) {
+            GridBagConstraints gbc = new GridBagConstraints(0, gridy,
+                    1, 1, 1.0, 0, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL, GUI.spaceInsets, 0, 0);
             add(component, gbc);
         }
 
@@ -219,7 +218,7 @@ public class Main {
             jFrame.setContentPane(this);
             jFrame.setResizable(false);
 
-            moveFrameToCenter(jFrame);
+            moveFrameToCenter();
 
             GridBagLayout lay = new GridBagLayout();
             setLayout(lay);
