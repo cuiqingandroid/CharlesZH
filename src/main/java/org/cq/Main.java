@@ -2,28 +2,27 @@ package org.cq;
 
 import org.cq.jartool.JarTool;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import charles.VersionFactory;
@@ -35,7 +34,7 @@ public class Main {
         new GUI();
     }
 
-    private static String translate(File originPath, boolean deleteTemp, boolean newOutput) {
+    private static String translate(File originPath, String version, boolean deleteTemp, boolean newOutput) {
         String filename = originPath.getName();
         String tempPath = new File(originPath.getParent(), filename + "_temp").getAbsolutePath();
         String outputFilename = filename.substring(0, filename.lastIndexOf(".")) + "_zh.jar";
@@ -45,7 +44,7 @@ public class Main {
         } else {
             outputFile = originPath;
         }
-        VersionModifier modifier = VersionFactory.createVersionModifier(VersionFactory.V_462, originPath.getAbsolutePath(), tempPath);
+        VersionModifier modifier = VersionFactory.createVersionModifier(version, originPath.getAbsolutePath(), tempPath);
         if (modifier != null) {
             boolean bytecodeModify = modifier.modifyByteCode();
             if (!bytecodeModify) {
@@ -76,104 +75,115 @@ public class Main {
         }
     }
 
-    private static void addOriginJarClasspath() {
-        URL url = null;
-        try {
-            url = new URL("file:///E:/code/java/CharlesZH/charles4.6.1.jar");
-            Method addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            addUrlMethod.setAccessible(true);
-            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            addUrlMethod.invoke(contextClassLoader, url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     static class GUI extends JPanel {
 
+        protected static final Insets spaceInsets = new Insets(10, 10, 4, 10);
         JFrame jFrame;
 
-        GUI() {
-            int w = 600;
-            int h = 400;
+        JComboBox<String> jComboBox;
+        JTextField textField;
 
-            jFrame = new JFrame("Charles汉化工具");
-            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            jFrame.setSize(w, h);
 
+        private void moveFrameToCenter(JFrame frame) {
             Toolkit kit = Toolkit.getDefaultToolkit();
             Dimension screenSize = kit.getScreenSize();
             int width = screenSize.width;
             int height = screenSize.height;
-            int x = (width - w) / 2;
-            int y = (height - h) / 2;
+            int x = (width - jFrame.getWidth()) / 2;
+            int y = (height - jFrame.getHeight()) / 2;
             jFrame.setLocation(x, y);
+        }
 
-            GridBagLayout lay = new GridBagLayout();
-            setLayout(lay);
+        protected void createTips(){
+            JTextArea desc = new JTextArea("找到charles安装目录里的charles.jar：" +System.getProperty("line.separator")+
+                    "Windows在C:/Program Files/Charles/lib/charles.jar，mac在/Applications/Charles.app/Contents/Java/charles.jar。" +System.getProperty("line.separator")+
+                    "将原文件拷贝到可以读写目录，在下方选择刚刚拷贝的文件，点击生成后，使用生成的文件替换charles安装目录的charles.jar。" +System.getProperty("line.separator")+
+                    "替换之前注意备份原始charles.jar，避免出现不可预知的问题。");
+            desc.setLineWrap(true);
+            desc.setMargin(new Insets(5, 5, 5, 5));
+            desc.setOpaque(false);
+            addComponent( desc, 0, 0, 5, 1, spaceInsets,
+                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
-            GridBagConstraints constraints = new GridBagConstraints();
-            JLabel tips = new JLabel("请选择charles.jar的文件路径，并保证读写权限");
-            constraints.gridx = 1;
-            constraints.gridy = 0;
-            constraints.weightx = 5;
-            add(tips, constraints);
+        }
+
+        protected void createVersionSelect() {
+            JPanel jPanel = new JPanel();
+            FlowLayout flowLayout = new FlowLayout();
+            flowLayout.setAlignment(FlowLayout.LEFT);
+            jPanel.setLayout(flowLayout);
+
+            JLabel okButton = new JLabel("选择charles版本:");
+            jPanel.add(okButton);
+
+            jComboBox = new JComboBox<>();
+            jComboBox.addItem("选择Charles版本");
+            for (String supportVersion: VersionFactory.SUPPORT_VERSIONS) {
+                jComboBox.addItem(supportVersion);
+            }
+
+            jPanel.add(jComboBox);
+            addComponent( jPanel, 0, 1, 5, 1, spaceInsets,
+                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        }
+
+        protected void createPath() {
+            JPanel jPanel = new JPanel();
+            FlowLayout flowLayout = new FlowLayout();
+            flowLayout.setAlignment(FlowLayout.LEFT);
+            jPanel.setLayout(flowLayout);
+
+            JLabel jLabel = new JLabel("选择charles.jar路径:");
+            jPanel.add(jLabel);
+
+            textField = new JTextField();
+            Dimension d = textField.getPreferredSize();
+            d.width = 300;
+            textField.setPreferredSize(d);
+            jPanel.add(textField);
 
 
-            JLabel prefix = new JLabel("charles.jar路径:");
-            constraints.gridx = 0;
-            constraints.gridy = 1;
-            constraints.weightx = 1;
-            add(prefix, constraints);
-
-            JTextField jtfPath = new JTextField();
-            constraints.gridx = 1;
-            constraints.gridy = 1;
-            constraints.weightx = 4;
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            add(jtfPath, constraints);
-
-
-            JButton jbSelectPath = new JButton("选择");
-            constraints.gridx = 2;
-            constraints.gridy = 1;
-            constraints.weightx = 1;
-            add(jbSelectPath, constraints);
-            jbSelectPath.addActionListener(e -> {
+            JButton button = new JButton("选择");
+            button.addActionListener(e -> {
                 JFileChooser jfc = new JFileChooser();
                 jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 jfc.showDialog(new JLabel(), "选择charles.jar文件");
                 File file = jfc.getSelectedFile();
                 if (file != null) {
-                    jtfPath.setText(file.getAbsolutePath());
-                    System.out.println("文件路径:" + jtfPath.getText());
+                    textField.setText(file.getAbsolutePath());
+                    System.out.println("文件路径:" + textField.getText());
                 } else {
                     System.out.println("操作取消");
                 }
             });
+            jPanel.add(button);
 
+            addComponent( jPanel, 0, 2, 5, 1, spaceInsets,
+                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+        }
 
-            JButton jbGenerate = new JButton();
-            jbGenerate.setText("一键汉化");
-            constraints.gridx = 1;
-            constraints.gridy = 2;
-            constraints.weightx = 2;
-            add(jbGenerate, constraints);
-            jbGenerate.addActionListener(e -> {
-                String path = jtfPath.getText();
+        protected void createOkButton() {
+            JPanel jPanel = new JPanel();
+            jPanel.setLayout(new FlowLayout());
+
+            JButton okButton = new JButton("OK");
+            jPanel.add(okButton);
+            okButton.addActionListener(e -> {
+                if (jComboBox.getSelectedIndex() <= 0) {
+                    JOptionPane.showMessageDialog(this, "请选择版本", "报错", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String version = (String) jComboBox.getSelectedItem();
+                String path = textField.getText();
                 if (path == null || path.length() <= 0) {
                     JOptionPane.showMessageDialog(this, "请先选择原始charles.jar", "报错", JOptionPane.ERROR_MESSAGE);
                 } else {
                     File file = new File(path);
                     if (file.exists()) {
-                        String errMsg = translate(file, false, true);
+                        String errMsg = translate(file, version, false, true);
                         if (errMsg == null) {
                             JOptionPane.showMessageDialog(this, "翻译成功，替换charles.jar后重启charles", "成功", JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -186,10 +196,42 @@ public class Main {
                 }
             });
 
+            addComponent( jPanel, 0, 4, 5, 1, spaceInsets,
+                    GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        }
+
+        protected void addComponent(Component component,
+                                    int gridx, int gridy, int gridwidth, int gridheight,
+                                    Insets insets, int anchor, int fill) {
+            GridBagConstraints gbc = new GridBagConstraints(gridx, gridy,
+                    gridwidth, gridheight, 1.0, 0, anchor, fill, insets, 0, 0);
+            add(component, gbc);
+        }
+
+        GUI() {
+            int w = 600;
+            int h = 400;
+
+            jFrame = new JFrame("Charles汉化工具");
+            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            jFrame.setSize(w, h);
             jFrame.setContentPane(this);
             jFrame.setResizable(false);
-            jFrame.setVisible(true);
 
+            moveFrameToCenter(jFrame);
+
+            GridBagLayout lay = new GridBagLayout();
+            setLayout(lay);
+
+            setLayout(new GridBagLayout());
+
+            createTips();
+            createVersionSelect();
+            createPath();
+            createOkButton();
+
+            jFrame.setVisible(true);
         }
     }
 }

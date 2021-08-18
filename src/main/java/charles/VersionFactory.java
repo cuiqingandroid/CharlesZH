@@ -14,7 +14,6 @@ public class VersionFactory {
     public static final List<String> SUPPORT_VERSIONS = new ArrayList<>(){};
 
     static {
-        SUPPORT_VERSIONS.add(V_461);
         SUPPORT_VERSIONS.add(V_462);
     }
 
