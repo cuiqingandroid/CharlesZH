@@ -13,6 +13,9 @@
 ## 3. 替换charles.jar
 替换charles安装目录下lib里面的charles为刚刚的`origin_charles.jar`
 
+## 4. 已知问题
+1. 会影响charles web服务
+
 **注意：**
 1. 在替换charles.jar之前，做好备份，以免打不开
 2. 本项目只做charles汉化，不包含破解，还请支持正版，[购买连接](https://www.charlesproxy.com/buy/)
