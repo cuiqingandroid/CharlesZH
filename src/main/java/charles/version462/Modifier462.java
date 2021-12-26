@@ -10,8 +10,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import charles.VersionModifier;
-import charles.version462.modifiers.JavaSourceReplace;
-import charles.version462.modifiers.MenuEncodingModifier;
+import charles.version462.modifiers.MenuModifier;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -32,9 +31,7 @@ public class Modifier462 extends VersionModifier {
             classPool.insertClassPath(getTempPath());
             modifyBundleStringEncoding(classPool, getTempPath());
             replaceSource();
-//            register(classPool, getSourcePath());
-            MenuEncodingModifier.modify(classPool, getTempPath());
-            JavaSourceReplace.modify(classPool, getTempPath());
+            MenuModifier.modify(classPool, getTempPath());
             return true;
         } catch (NotFoundException | CannotCompileException | IOException e) {
             e.printStackTrace();
@@ -88,7 +85,6 @@ public class Modifier462 extends VersionModifier {
 
     }
 
-
     /**
      * 修改string bundle的字符编码
      */
@@ -111,16 +107,4 @@ public class Modifier462 extends VersionModifier {
         ctClass.detach();
     }
 
-//    /**
-//     * 注册
-//     */
-//    private void register(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-//        CtClass ctClass = classPool.get("com.xk72.charles.p");
-//        CtMethod ctMethod =ctClass.getDeclaredMethod("a",null);
-//        ctMethod.setBody("{return true;}");
-//        ctMethod = ctClass.getDeclaredMethod("c",null);
-//        ctMethod.setBody("{return \"cuiqing\";}");
-//        ctClass.writeFile(savePath);
-//        ctClass.detach();
-//    }
 }

@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import charles.VersionFactory;
 import charles.VersionModifier;
@@ -98,14 +100,14 @@ public class Main {
 
         protected void createTips(){
             JTextArea desc = new JTextArea("找到charles安装目录里的charles.jar：" +System.getProperty("line.separator")+
-                    "Windows在C:/Program Files/Charles/lib/charles.jar，mac在/Applications/Charles.app/Contents/Java/charles.jar。" +System.getProperty("line.separator")+
+                    "Windows在C:/Program Files/Charles/lib/charles.jar" + System.getProperty("line.separator")+
+                    "mac在/Applications/Charles.app/Contents/Java/charles.jar" +System.getProperty("line.separator")+
                     "将原文件拷贝到可以读写目录，在下方选择刚刚拷贝的文件，点击生成后，使用生成的文件替换charles安装目录的charles.jar。" +System.getProperty("line.separator")+
                     "替换之前注意备份原始charles.jar，避免出现不可预知的问题。");
             desc.setLineWrap(true);
             desc.setMargin(new Insets(5, 5, 5, 5));
             desc.setOpaque(false);
-            addComponent( desc, 0
-            );
+            addComponent( desc, 0);
 
         }
 
@@ -183,7 +185,7 @@ public class Main {
                 } else {
                     File file = new File(path);
                     if (file.exists()) {
-                        String errMsg = translate(file, version, false, true);
+                        String errMsg = translate(file, version, true, true);
                         if (errMsg == null) {
                             JOptionPane.showMessageDialog(this, "翻译成功，替换charles.jar后重启charles", "成功", JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -209,6 +211,18 @@ public class Main {
         }
 
         GUI() {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+
             int w = 600;
             int h = 400;
 

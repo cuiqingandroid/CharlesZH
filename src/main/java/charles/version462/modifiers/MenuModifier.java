@@ -10,44 +10,63 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 
-public class MenuEncodingModifier extends JMenu{
+public class MenuModifier extends JMenu{
     public static void modify(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-//        modifyViewMenu(classPool, savePath);
-//        modifySessionMenu(classPool, savePath);
+        modifyViewMenu(classPool, savePath);
+        modifySessionMenu(classPool, savePath);
         modifyCharlesFrame(classPool, savePath);
         modifyActionSwitchboard(classPool, savePath);
         modifyCompose(classPool, savePath);
         editMenu(classPool, savePath);
         copyUrl(classPool, savePath);
+        addHelpMenu(classPool, savePath);
     }
 
     /**
      * 修改文件菜单的open和import
      */
     private static void modifySessionMenu(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-        CtClass ctClass = classPool.get("com.xk72.charles.ZOpb");
+        CtClass ctClass = classPool.get("com.xk72.charles.i");
         CtConstructor ctConstructor = ctClass.getConstructors()[0];
-        ctConstructor.setBody("{kbzH = (javax.swing.Action)new com.xk72.charles.CharlesGUIFileManager$1(this, \"打开会话\",\"打开之前的会话\");ERKX = (javax.swing.Action)new com.xk72.charles.CharlesGUIFileManager$2(this, \"导入\", \"导入文件到会话\");}");
+        ctConstructor.insertAfter("{" +
+                "l.putValue(javax.swing.Action.NAME, \"打开会话\");" +
+                "l.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"打开之前的会话\");" +
+                "m.putValue(javax.swing.Action.NAME, \"导入\");" +
+                "m.putValue(javax.swing.Action.SHORT_DESCRIPTION, \"导入文件到会话\");" +
+                "}");
         ctClass.writeFile(savePath);
+        ctClass.detach();
     }
 
     /**
      * 修改视图菜单
      */
     private static void modifyViewMenu(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
-        CtClass ctClass = classPool.get("com.xk72.charles.gui.transaction.frames.SkbX");
+        CtClass ctClass = classPool.get("com.xk72.charles.gui.transaction.frames.n");
         CtConstructor ctConstructor = ctClass.getConstructors()[0];
         ctConstructor.insertAfter("{" +
-                "kbzH.putValue(javax.swing.Action.NAME, \"备注\");" +
-                "ERKX.putValue(javax.swing.Action.NAME, \"请求\");" +
-                "gMxR.putValue(javax.swing.Action.NAME, \"响应\");" +
-                "PRdh.putValue(javax.swing.Action.NAME, \"总览\");" +
-                "Idso.putValue(javax.swing.Action.NAME, \"概览\");" +
-                "Vvaz.putValue(javax.swing.Action.NAME, \"图表\");" +
+                "l.putValue(javax.swing.Action.NAME, \"备注\");" +
+                "m.putValue(javax.swing.Action.NAME, \"请求\");" +
+                "n.putValue(javax.swing.Action.NAME, \"响应\");" +
                 "}");
         ctClass.writeFile(savePath);
+        ctClass.detach();
+
+
+
+
+        ctClass = classPool.get("com.xk72.charles.gui.transaction.frames.d");
+        ctConstructor = ctClass.getConstructors()[0];
+        ctConstructor.insertAfter("{" +
+                "e.putValue(javax.swing.Action.NAME, \"总览\");" +
+                "f.putValue(javax.swing.Action.NAME, \"概览\");" +
+                "g.putValue(javax.swing.Action.NAME, \"图表\");" +
+                "}");
+        ctClass.writeFile(savePath);
+        ctClass.detach();
     }
 
 
@@ -211,5 +230,31 @@ public class MenuEncodingModifier extends JMenu{
         ctClass.detach();
     }
 
+    /**
+     * help menu增加菜单
+     */
+    private static void addHelpMenu(ClassPool classPool, String savePath) throws NotFoundException, CannotCompileException, IOException {
+        if (classPool.find("com.xk72.charles.gui.menus.HelpMenuUrl") == null) {
+            CtClass helpUrlClass = classPool.makeClass("com.xk72.charles.gui.menus.HelpMenuUrl", classPool.get("javax.swing.AbstractAction"));
+            CtConstructor urlConstruct = new CtConstructor(new CtClass[] {classPool.get("java.lang.String")}, helpUrlClass);
+            urlConstruct.setBody("{" +
+                    "super($1);\n"+
+                    "}");
+            helpUrlClass.addConstructor(urlConstruct);
+            CtMethod ctMethod=new CtMethod(CtClass.voidType,"actionPerformed",new CtClass[]{classPool.get("java.awt.event.ActionEvent")}, helpUrlClass);
+            ctMethod.setModifiers(Modifier.PUBLIC);
+            ctMethod.setBody("{com.xk72.util.k.a(\"https://github.com/cuiqingandroid/CharlesZH\");}");
+            helpUrlClass.addMethod(ctMethod);
+            helpUrlClass.writeFile(savePath);
+            helpUrlClass.detach();
+        }
+        CtClass ctClass = classPool.get("com.xk72.charles.gui.menus.HelpMenu");
+        CtConstructor ctConstructor = ctClass.getConstructors()[0];
+        ctConstructor.insertAfter("{" +
+                "add(new com.xk72.charles.gui.menus.HelpMenuUrl(\"翻译支持\"));"+
+                "}");
+        ctClass.writeFile(savePath);
+        ctClass.detach();
+    }
 
 }
